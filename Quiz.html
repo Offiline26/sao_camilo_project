@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz - São Camilo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <img src="https://vestibularonline.net.br/wp-content/uploads/2023/12/faculdade-sao-camilo-vestibular-cursos-e-como-funciona.png" alt="Logo São Camilo" class="logo">
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+      <nav>
+        <ul class="menu">
+          <li><a href="Home.html">Home</a></li>
+          <li><a href="Quiz.html">Quiz</a></li>
+          <li><a href="Sobre.html">Sobre Nós</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Quiz sobre Vapes</h2>
+    
+    <form id="quizForm" class="text-block">
+      <!-- Cada input correto terá value=\"true\" -->
+      <p>1. Qual das opções representa um risco do uso de vapes?</p>
+      <label><input type="radio" name="q1" value="false"> A) Fortalecimento pulmonar</label><br>
+      <label><input type="radio" name="q1" value="true"> B) Danos aos pulmões</label><br>
+      <label><input type="radio" name="q1" value="false"> C) Melhora do sono</label><br><br>
+
+      <p>2. Os cigarros eletrônicos contêm qual substância viciante?</p>
+      <label><input type="radio" name="q2" value="false"> A) Cafeína</label><br>
+      <label><input type="radio" name="q2" value="true"> B) Nicotina</label><br>
+      <label><input type="radio" name="q2" value="false"> C) Ácido fólico</label><br><br>
+
+      <p>3. Qual faixa etária mais consome vapes atualmente?</p>
+      <label><input type="radio" name="q3" value="false"> A) Idosos</label><br>
+      <label><input type="radio" name="q3" value="false"> B) Adultos</label><br>
+      <label><input type="radio" name="q3" value="true"> C) Adolescentes</label><br><br>
+
+      <p>4. Vapes são proibidos no Brasil?</p>
+      <label><input type="radio" name="q4" value="true"> A) Sim, a venda é proibida</label><br>
+      <label><input type="radio" name="q4" value="false"> B) Não, são liberados</label><br>
+      <label><input type="radio" name="q4" value="false"> C) Só são proibidos em festas</label><br><br>
+
+      <p>5. Um dos motivos do uso entre jovens é:</p>
+      <label><input type="radio" name="q5" value="false"> A) Sabor amargo</label><br>
+      <label><input type="radio" name="q5" value="false"> B) Preço alto</label><br>
+      <label><input type="radio" name="q5" value="true"> C) Aromas e sabores atrativos</label><br><br>
+
+      <p>6. Qual órgão é diretamente afetado pelo vape?</p>
+      <label><input type="radio" name="q6" value="false"> A) Fígado</label><br>
+      <label><input type="radio" name="q6" value="true"> B) Pulmões</label><br>
+      <label><input type="radio" name="q6" value="false"> C) Intestino</label><br><br>
+
+      <p>7. Qual desses NÃO é um mito sobre vapes?</p>
+      <label><input type="radio" name="q7" value="true"> A) Eles fazem mal à saúde</label><br>
+      <label><input type="radio" name="q7" value="false"> B) Não têm nicotina</label><br>
+      <label><input type="radio" name="q7" value="false"> C) Não causam dependência</label><br><br>
+
+      <p>8. O uso contínuo de vapes pode levar a:</p>
+      <label><input type="radio" name="q8" value="false"> A) Maior rendimento físico</label><br>
+      <label><input type="radio" name="q8" value="true"> B) Problemas respiratórios crônicos</label><br>
+      <label><input type="radio" name="q8" value="false"> C) Cura de vícios antigos</label><br><br>
+
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div id="resultado" class="text-block" style="display:none; margin-top: 20px;"></div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Faculdade São Camilo. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+  <script>
+    function toggleMenu() {
+      const menu = document.querySelector('.menu');
+      menu.classList.toggle('show');
+    }
+  
+    document.getElementById('quizForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      const respostas = document.querySelectorAll('input[type=radio]');
+      let pontos = 0;
+  
+      respostas.forEach(resp => {
+        const label = resp.parentElement;
+        label.classList.remove('correta');
+  
+        if (resp.checked && resp.value === "true") {
+          pontos++;
+        }
+  
+        if (resp.value === "true") {
+          label.classList.add('correta');
+        }
+      });
+  
+      const resultado = document.getElementById('resultado');
+      resultado.style.display = 'block';
+      resultado.innerHTML = `<h3>Você acertou ${pontos} de 8 perguntas.</h3>`;
+    });
+  </script>
+</body>
+</html>
