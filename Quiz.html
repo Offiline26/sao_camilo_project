@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz - São Camilo</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz - São Camilo</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="firebase.js"></script>
+  </head>
 <body>
   <header>
     <div class="container">
@@ -13,98 +17,148 @@
       <button class="menu-toggle" onclick="toggleMenu()">☰</button>
       <nav>
         <ul class="menu">
-          <li><a href="Home.html">Home</a></li>
-          <li><a href="Quiz.html">Quiz</a></li>
-          <li><a href="Sobre.html">Sobre Nós</a></li>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="sobre.html">Sobre Nós</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main class="container">
-    <h2>Quiz sobre Vapes</h2>
-    
-    <form id="quizForm" class="text-block">
-      <!-- Cada input correto terá value=\"true\" -->
-      <p>1. Qual das opções representa um risco do uso de vapes?</p>
-      <label><input type="radio" name="q1" value="false"> A) Fortalecimento pulmonar</label><br>
-      <label><input type="radio" name="q1" value="true"> B) Danos aos pulmões</label><br>
-      <label><input type="radio" name="q1" value="false"> C) Melhora do sono</label><br><br>
+    <div id="loginForm" class="text-block">
+      <h2>Antes de iniciar, informe seu nome e idade</h2>
+      <label>Nome: <input type="text" id="nome"></label><br><br>
+      <label>Idade: <input type="number" id="idade"></label><br><br>
+      <button onclick="iniciarQuiz()">Começar</button>
+    </div>
 
-      <p>2. Os cigarros eletrônicos contêm qual substância viciante?</p>
-      <label><input type="radio" name="q2" value="false"> A) Cafeína</label><br>
-      <label><input type="radio" name="q2" value="true"> B) Nicotina</label><br>
-      <label><input type="radio" name="q2" value="false"> C) Ácido fólico</label><br><br>
+    <form id="quizForm" class="text-block hidden">
+      <h2>Quiz sobre Vapes</h2>
+      <p>1. Qual é a principal mensagem do texto?</p>
+      <label><input type="radio" name="q1" value="false"> A) Incentivar o uso de vapes como alternativa ao cigarro.</label><br>
+      <label><input type="radio" name="q1" value="true"> B) Alertar sobre os perigos dos vapes e cigarros eletrônicos.</label><br>
+      <label><input type="radio" name="q1" value="false"> C) Explicar o funcionamento dos alvéolos pulmonares.</label><br><br>
+      
+      <p>2. Qual das opções abaixo é um dos problemas que o uso de vape pode causar?</p>
+      <label><input type="radio" name="q2" value="false"> A) Fortalecimento dos pulmões.</label><br>
+      <label><input type="radio" name="q2" value="false"> B) Parada cardíaca imediata.</label><br>
+      <label><input type="radio" name="q2" value="true"> C) Água nos pulmões.</label><br><br>
+      
+      <p>3. Qual é a função dos alvéolos mencionada no texto?</p>
+      <label><input type="radio" name="q3" value="false"> A) Bombear sangue pelo corpo.</label><br>
+      <label><input type="radio" name="q3" value="true"> B) Fazer a troca de oxigênio no pulmão.</label><br>
+      <label><input type="radio" name="q3" value="false"> C) Produzir nicotina natural.</label><br><br>
+      
+      <p>4. O que o texto afirma sobre a nicotina nos vapes?</p>
+      <label><input type="radio" name="q4" value="false"> A) Que ela não vicia como no cigarro comum.</label><br>
+      <label><input type="radio" name="q4" value="true"> B) Que muitas vezes está presente sem o usuário saber.</label><br>
+      <label><input type="radio" name="q4" value="false"> C) Que ela é inofensiva em cigarros eletrônicos.</label><br><br>
+      
+      <p>5. Uma tragada de vape pode equivaler a:</p>
+      <label><input type="radio" name="q5" value="false"> A) Fumar meio cigarro comum.</label><br>
+      <label><input type="radio" name="q5" value="true"> B) Fumar 5 maços de cigarro comum.</label><br>
+      <label><input type="radio" name="q5" value="false"> C) Inalar oxigênio puro.</label><br><br>
+      
+      <p>6. Quais substâncias prejudiciais podem estar presentes nos vapes?</p>
+      <label><input type="radio" name="q6" value="false"> A) Vitaminas e minerais.</label><br>
+      <label><input type="radio" name="q6" value="true"> B) Metais pesados e resíduos parecidos com metanfetamina.</label><br>
+      <label><input type="radio" name="q6" value="false"> C) Apenas água e aroma natural.</label><br><br>
+      
+      <p>7. Segundo o texto, o uso do vape pode causar:</p>
+      <label><input type="radio" name="q7" value="false"> A) Aumento da capacidade pulmonar.</label><br>
+      <label><input type="radio" name="q7" value="true"> B) Dependência química absurda.</label><br>
+      <label><input type="radio" name="q7" value="false"> C) Vontade de parar de fumar naturalmente.</label><br><br>
+      
+      <p>8. O autor do texto sugere que as pessoas:</p>
+      <label><input type="radio" name="q8" value="false"> A) Experimentem o vape com moderação.</label><br>
+      <label><input type="radio" name="q8" value="false"> B) Usem o vape apenas em festas.</label><br>
+      <label><input type="radio" name="q8" value="true"> C) Cuidem da saúde e fiquem longe do vape.</label><br><br>
 
-      <p>3. Qual faixa etária mais consome vapes atualmente?</p>
-      <label><input type="radio" name="q3" value="false"> A) Idosos</label><br>
-      <label><input type="radio" name="q3" value="false"> B) Adultos</label><br>
-      <label><input type="radio" name="q3" value="true"> C) Adolescentes</label><br><br>
-
-      <p>4. Vapes são proibidos no Brasil?</p>
-      <label><input type="radio" name="q4" value="true"> A) Sim, a venda é proibida</label><br>
-      <label><input type="radio" name="q4" value="false"> B) Não, são liberados</label><br>
-      <label><input type="radio" name="q4" value="false"> C) Só são proibidos em festas</label><br><br>
-
-      <p>5. Um dos motivos do uso entre jovens é:</p>
-      <label><input type="radio" name="q5" value="false"> A) Sabor amargo</label><br>
-      <label><input type="radio" name="q5" value="false"> B) Preço alto</label><br>
-      <label><input type="radio" name="q5" value="true"> C) Aromas e sabores atrativos</label><br><br>
-
-      <p>6. Qual órgão é diretamente afetado pelo vape?</p>
-      <label><input type="radio" name="q6" value="false"> A) Fígado</label><br>
-      <label><input type="radio" name="q6" value="true"> B) Pulmões</label><br>
-      <label><input type="radio" name="q6" value="false"> C) Intestino</label><br><br>
-
-      <p>7. Qual desses NÃO é um mito sobre vapes?</p>
-      <label><input type="radio" name="q7" value="true"> A) Eles fazem mal à saúde</label><br>
-      <label><input type="radio" name="q7" value="false"> B) Não têm nicotina</label><br>
-      <label><input type="radio" name="q7" value="false"> C) Não causam dependência</label><br><br>
-
-      <p>8. O uso contínuo de vapes pode levar a:</p>
-      <label><input type="radio" name="q8" value="false"> A) Maior rendimento físico</label><br>
-      <label><input type="radio" name="q8" value="true"> B) Problemas respiratórios crônicos</label><br>
-      <label><input type="radio" name="q8" value="false"> C) Cura de vícios antigos</label><br><br>
+      <p><strong>Essa pesquisa foi útil para você?</strong></p>
+      <label><input type="radio" name="util" value="Sim"> Sim, curti!</label><br>
+      <label><input type="radio" name="util" value="Não"> Não :(</label><br><br>
 
       <button type="submit">Enviar</button>
     </form>
 
-    <div id="resultado" class="text-block" style="display:none; margin-top: 20px;"></div>
+    <div id="resultado" class="text-block hidden" style="margin-top: 20px;"></div>
   </main>
 
   <footer>
     <div class="container">
-      <p>&copy; 2025 Faculdade São Camilo. Todos os direitos reservados.</p>
+      <p>&copy; 2025</p>
     </div>
   </footer>
+
   <script>
+    let nome = "";
+    let idade = "";
+
     function toggleMenu() {
       const menu = document.querySelector('.menu');
       menu.classList.toggle('show');
     }
-  
+
+    function iniciarQuiz() {
+      nome = document.getElementById('nome').value.trim();
+      idade = document.getElementById('idade').value.trim();
+
+      if (!nome || !idade) {
+        alert("Por favor, preencha seu nome e idade.");
+        return;
+      }
+
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('quizForm').classList.remove('hidden');
+    }
+
     document.getElementById('quizForm').addEventListener('submit', function (e) {
       e.preventDefault();
-      
+
       const respostas = document.querySelectorAll('input[type=radio]');
       let pontos = 0;
-  
+      let respostasDadas = [];
+      let util = document.querySelector('input[name="util"]:checked');
+
       respostas.forEach(resp => {
         const label = resp.parentElement;
         label.classList.remove('correta');
-  
+
+        if (resp.checked) {
+          respostasDadas.push(label.innerText);
+        }
+
         if (resp.checked && resp.value === "true") {
           pontos++;
         }
-  
+
         if (resp.value === "true") {
           label.classList.add('correta');
         }
       });
-  
+
+      const dados = {
+        nome,
+        idade,
+        pontos,
+        respostas: respostasDadas,
+        util: util ? util.value : "Não informado",
+        data: new Date().toLocaleString()
+      };
+
+      if (typeof enviarRespostasFirebase === 'function') {
+        enviarRespostasFirebase(dados);
+      }
+
       const resultado = document.getElementById('resultado');
       resultado.style.display = 'block';
-      resultado.innerHTML = `<h3>Você acertou ${pontos} de 8 perguntas.</h3>`;
+      resultado.classList.remove('hidden');
+      resultado.innerHTML = `
+        <h3>Resultado de ${nome}, ${idade} anos</h3>
+        <p>Você acertou <strong>${pontos}</strong> de 8 perguntas.</p>
+        <p><strong>Achou útil?:</strong> ${dados.util}</p>
+      `;
     });
   </script>
 </body>
