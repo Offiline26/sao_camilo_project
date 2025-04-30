@@ -5,22 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>São Camilo - Vapes</title>
     <link rel="stylesheet" href="style.css">
+    
     <script>
+        let nome = "";
+        let idade = "";
+        
         function toggleMenu() {
-        const menu = document.querySelector('.menu');
-        menu.classList.toggle('show');
+            const menu = document.querySelector('.menu');
+            menu.classList.toggle('show');
         }
+        
+        function iniciarQuiz() {
+            nome = document.getElementById('nome').value.trim();
+            idade = document.getElementById('idade').value.trim();
+        
+            if (!nome || !idade) {
+            alert("Por favor, preencha seu nome e idade.");
+            return;
+            }
+        
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('quizForm').classList.remove('hidden');
+        }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('quizForm');
+            if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+        
+                const respostas = document.querySelectorAll('input[type=radio]');
+                let pontos = 0;
+                let util = document.querySelector('input[name="util"]:checked');
+        
+                respostas.forEach(resp => {
+                const label = resp.parentElement;
+                label.classList.remove('correta');
+        
+                if (resp.checked && resp.value === "true") {
+                    pontos++;
+                }
+        
+                if (resp.value === "true") {
+                    label.classList.add('correta');
+                }
+                });
+        
+                const dados = {
+                nome,
+                idade,
+                pontos,
+                util: util ? util.value : "Não informado"
+                };
+        
+                // Enviar para backend Flask
+                fetch("http://localhost:5000/quiz", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dados)
+                })
+                .then(res => {
+                if (!res.ok) throw new Error("Erro ao salvar");
+                return res.json();
+                })
+                .then(() => {
+                const resultado = document.getElementById('resultado');
+                resultado.style.display = 'block';
+                resultado.classList.remove('hidden');
+                resultado.innerHTML = `
+                    <h3>Resultado de ${nome}, ${idade} anos</h3>
+                    <p>Você acertou <strong>${pontos}</strong> de 8 perguntas.</p>
+                    <p><strong>Achou útil?:</strong> ${dados.util}</p>
+                `;
+                })
+                .catch(err => {
+                alert("Erro ao enviar respostas.");
+                console.error(err);
+                });
+            });
+            }
+        });
     </script>
+
+
     </head>
     <body>
     <header>
         <div class="container">
-        <img src="https://vestibularonline.net.br/wp-content/uploads/2023/12/faculdade-sao-camilo-vestibular-cursos-e-como-funciona.png" alt="Logo São Camilo" class="logo">
+        <img src="https://aquinoticias.com/wp-content/uploads/2023/10/LOGO-SAO-CAMILO-scaled-2.jpg" alt="Logo São Camilo" class="logo">
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
         <nav>
             <ul class="menu">
             <li><a href="home.html">Home</a></li>
-            <li><a href="quiz.html">Quiz</a></li>
             <li><a href="sobre.html">Sobre Nós</a></li>
             </ul>
         </nav>
@@ -62,6 +140,66 @@
                 <a href="https://youtu.be/P6fgYEShpvg?si=feDaAdN0jsZx8Avl" target="_blank">📹 Julio Balestrin FAZ ALERTA sobre os perigos do cigarro eletrônico – Flow Podcast</a>
                 </div>
           </section>
+
+          <main class="container">
+            <div id="loginForm" class="text-block">
+              <h2>Antes de iniciar o <strong>QUIZ</strong>, informe seu nome e idade</h2>
+              <label>Nome: <input type="text" id="nome"></label><br><br>
+              <label>Idade: <input type="number" id="idade"></label><br><br>
+              <button onclick="iniciarQuiz()">Começar</button>
+            </div>
+        
+            <form id="quizForm" class="text-block hidden">
+              <h2>Quiz sobre Vapes</h2>
+              <p>1. Qual é a principal mensagem do texto?</p>
+              <label><input type="radio" name="q1" value="false"> A) Incentivar o uso de vapes como alternativa ao cigarro.</label><br>
+              <label><input type="radio" name="q1" value="true"> B) Alertar sobre os perigos dos vapes e cigarros eletrônicos.</label><br>
+              <label><input type="radio" name="q1" value="false"> C) Explicar o funcionamento dos alvéolos pulmonares.</label><br><br>
+              
+              <p>2. Qual das opções abaixo é um dos problemas que o uso de vape pode causar?</p>
+              <label><input type="radio" name="q2" value="false"> A) Fortalecimento dos pulmões.</label><br>
+              <label><input type="radio" name="q2" value="false"> B) Parada cardíaca imediata.</label><br>
+              <label><input type="radio" name="q2" value="true"> C) Água nos pulmões.</label><br><br>
+              
+              <p>3. Qual é a função dos alvéolos mencionada no texto?</p>
+              <label><input type="radio" name="q3" value="false"> A) Bombear sangue pelo corpo.</label><br>
+              <label><input type="radio" name="q3" value="true"> B) Fazer a troca de oxigênio no pulmão.</label><br>
+              <label><input type="radio" name="q3" value="false"> C) Produzir nicotina natural.</label><br><br>
+              
+              <p>4. O que o texto afirma sobre a nicotina nos vapes?</p>
+              <label><input type="radio" name="q4" value="false"> A) Que ela não vicia como no cigarro comum.</label><br>
+              <label><input type="radio" name="q4" value="true"> B) Que muitas vezes está presente sem o usuário saber.</label><br>
+              <label><input type="radio" name="q4" value="false"> C) Que ela é inofensiva em cigarros eletrônicos.</label><br><br>
+              
+              <p>5. Uma tragada de vape pode equivaler a:</p>
+              <label><input type="radio" name="q5" value="false"> A) Fumar meio cigarro comum.</label><br>
+              <label><input type="radio" name="q5" value="true"> B) Fumar 5 maços de cigarro comum.</label><br>
+              <label><input type="radio" name="q5" value="false"> C) Inalar oxigênio puro.</label><br><br>
+              
+              <p>6. Quais substâncias prejudiciais podem estar presentes nos vapes?</p>
+              <label><input type="radio" name="q6" value="false"> A) Vitaminas e minerais.</label><br>
+              <label><input type="radio" name="q6" value="true"> B) Metais pesados e resíduos parecidos com metanfetamina.</label><br>
+              <label><input type="radio" name="q6" value="false"> C) Apenas água e aroma natural.</label><br><br>
+              
+              <p>7. Segundo o texto, o uso do vape pode causar:</p>
+              <label><input type="radio" name="q7" value="false"> A) Aumento da capacidade pulmonar.</label><br>
+              <label><input type="radio" name="q7" value="true"> B) Dependência química absurda.</label><br>
+              <label><input type="radio" name="q7" value="false"> C) Vontade de parar de fumar naturalmente.</label><br><br>
+              
+              <p>8. O autor do texto sugere que as pessoas:</p>
+              <label><input type="radio" name="q8" value="false"> A) Experimentem o vape com moderação.</label><br>
+              <label><input type="radio" name="q8" value="false"> B) Usem o vape apenas em festas.</label><br>
+              <label><input type="radio" name="q8" value="true"> C) Cuidem da saúde e fiquem longe do vape.</label><br><br>
+        
+              <p><strong>Essa pesquisa foi útil para você?</strong></p>
+              <label><input type="radio" name="util" value="Sim"> Sim, curti!</label><br>
+              <label><input type="radio" name="util" value="Não"> Não :(</label><br><br>
+        
+              <button type="submit">Enviar</button>
+            </form>
+        
+            <div id="resultado" class="text-block hidden" style="margin-top: 20px;"></div>
+
     </main>
     
     <footer>
