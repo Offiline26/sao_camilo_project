@@ -59,13 +59,13 @@
                 };
         
                 // Enviar para backend Flask
-                fetch("http://localhost:5000/quiz", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(dados)
-                })
+                fetch("https://quiz-backend.onrender.com/quiz", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dados)
+                  })
                 .then(res => {
                 if (!res.ok) throw new Error("Erro ao salvar");
                 return res.json();
