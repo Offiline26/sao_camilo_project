@@ -44,13 +44,19 @@
           }
 
           registros.forEach(item => {
+            const nome = item.nome || 'Nome não informado';
+            const idade = item.idade !== undefined ? item.idade : 'não informada';
+            const dataEnvio = item.data_envio || 'não registrada';
+            const pontos = item.pontos !== undefined ? item.pontos : 'não informado';
+            const util = item.util || 'não informado';
+
             const div = document.createElement('div');
             div.className = 'registro';
             div.innerHTML = `
-              <h3>${item.nome}, ${item.idade} anos</h3>
-              <p><strong>Data:</strong> ${item.data_envio}</p>
-              <p><strong>Pontuação:</strong> ${item.pontos}/8</p>
-              <p><strong>Achou útil?</strong> ${item.util}</p>
+              <h3>${nome}, ${idade} anos</h3>
+              <p><strong>Data:</strong> ${dataEnvio}</p>
+              <p><strong>Pontuação:</strong> ${pontos}/8</p>
+              <p><strong>Achou útil?</strong> ${util}</p>
             `;
             container.appendChild(div);
           });
