@@ -36,10 +36,24 @@
         .then(res => res.json())
         .then(data => {
           container.innerHTML = '';
-          if (data.length === 0) {
+          const registros = Object.values(data);
+
+          if (registros.length === 0) {
             container.innerHTML = '<p>Nenhuma resposta registrada ainda.</p>';
             return;
           }
+
+          registros.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'registro';
+            div.innerHTML = `
+              <h3>${item.nome}, ${item.idade} anos</h3>
+              <p><strong>Data:</strong> ${item.data_envio}</p>
+              <p><strong>Pontuação:</strong> ${item.pontos}/8</p>
+              <p><strong>Achou útil?</strong> ${item.util}</p>
+            `;
+            container.appendChild(div);
+          });
           data.forEach(item => {
             const div = document.createElement('div');
             div.className = 'registro';
