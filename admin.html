@@ -32,7 +32,7 @@
 
     function carregarRespostas() {
       const container = document.getElementById('respostas');
-      fetch("https://quiz-backend.onrender.com/quiz")
+      fetch("dados.json")
         .then(res => res.json())
         .then(data => {
           container.innerHTML = '';
